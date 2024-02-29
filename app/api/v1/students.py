@@ -7,13 +7,13 @@ from app import schemas, models
 router = APIRouter(prefix="/api/v1/students", tags=["students"])
 
 
-@router.get("/")
+@router.get("/", status_code=status.HTTP_200_OK)
 def get_students(db: Session = Depends(get_db)):
     students= db.query(models.Student).all()
     return students
 
 
-@router.post("/")
+@router.post("/", status_code=status.HTTP_201_CREATED)
 def create_student(payload: schemas.StudentRequest, db: Session = Depends(get_db)):
     new_student = models.Student(**payload.model_dump())
     db.add(new_student)
@@ -23,7 +23,7 @@ def create_student(payload: schemas.StudentRequest, db: Session = Depends(get_db
     return new_student
 
 
-@router.get("/{student_id}")
+@router.get("/{student_id}", status_code=status.HTTP_200_OK)
 def get_student(student_id: int, db: Session = Depends(get_db)):
     student = db.query(models.Student).filter(models.Student.id == student_id).first()
 
@@ -33,7 +33,7 @@ def get_student(student_id: int, db: Session = Depends(get_db)):
     return student
 
 
-@router.delete("/{student_id}")
+@router.delete("/{student_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_student(student_id: int, db: Session = Depends(get_db)):
     student_query = db.query(models.Student).filter(models.Student.id == student_id)
     student = student_query.first()
