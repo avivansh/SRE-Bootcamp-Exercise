@@ -3,14 +3,17 @@ This repository will cover all the milestones laid out here:- https://playbook.o
 
 ## Pre-requisites
 - Docker
+- Make
 
 
 # To run locally
 
 ```bash
+# clone the repository
 git clone https://github.com/avivansh/SRE-Bootcamp-Exercise.git
+# change directory to the cloned repository
 cd SRE-Bootcamp-Exercise
-cat .env-example > .env
-docker-compose up
+# bring up the api application on docker using make (check [Makefile](./Makefile))
+make
 ```
 
