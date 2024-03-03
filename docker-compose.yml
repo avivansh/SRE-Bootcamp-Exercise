@@ -10,7 +10,7 @@ services:
       - "8000:8000"
     volumes:
         - .:/app # This is the line that mounts the local directory to the container
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    command: bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
   db:
     image: "postgres:16"
@@ -20,6 +20,8 @@ services:
       POSTGRES_DB: sre-bootcamp
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
 
 volumes:
   postgres_data:

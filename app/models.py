@@ -12,3 +12,6 @@ class Student(Base):
     class_section = Column(String, nullable=False)
     age = Column(Integer, nullable=False)
     created_at = Column((TIMESTAMP(timezone=True)), nullable=False, server_default=text("now()"))
+    gender = Column(String, nullable=False)
+    phone_number = Column(String)
+    temp = Column(String)
