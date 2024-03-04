@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
 
@@ -12,3 +13,7 @@ class StudentRequest(BaseModel):
 
     class config:
         orm_mode = True
+
+class StudentResponse(StudentRequest):
+    id: int
+    created_at: datetime

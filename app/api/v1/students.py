@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from ...database import get_db
@@ -7,13 +8,13 @@ from app import schemas, models
 router = APIRouter(prefix="/api/v1/students", tags=["students"])
 
 
-@router.get("/", status_code=status.HTTP_200_OK)
+@router.get("/", status_code=status.HTTP_200_OK, response_model=List[schemas.StudentResponse])
 def get_students(db: Session = Depends(get_db)):
     students= db.query(models.Student).all()
     return students
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.StudentResponse)
 def create_student(payload: schemas.StudentRequest, db: Session = Depends(get_db)):
     new_student = models.Student(**payload.model_dump())
     db.add(new_student)
@@ -23,7 +24,7 @@ def create_student(payload: schemas.StudentRequest, db: Session = Depends(get_db
     return new_student
 
 
-@router.get("/{student_id}", status_code=status.HTTP_200_OK)
+@router.get("/{student_id}", status_code=status.HTTP_200_OK, response_model=schemas.StudentResponse)
 def get_student(student_id: int, db: Session = Depends(get_db)):
     student = db.query(models.Student).filter(models.Student.id == student_id).first()
 
@@ -46,7 +47,7 @@ def delete_student(student_id: int, db: Session = Depends(get_db)):
     return { "message": "Student deleted successfully!"}
 
 
-@router.put("/{student_id}")
+@router.put("/{student_id}", status_code=status.HTTP_200_OK, response_model=schemas.StudentResponse)
 def update_student(student_id: int, payload: schemas.StudentRequest, db: Session = Depends(get_db)):
     student_query = db.query(models.Student).filter(models.Student.id == student_id)
     student = student_query.first()

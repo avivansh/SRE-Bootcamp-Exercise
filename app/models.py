@@ -14,4 +14,3 @@ class Student(Base):
     created_at = Column((TIMESTAMP(timezone=True)), nullable=False, server_default=text("now()"))
     gender = Column(String, nullable=False)
     phone_number = Column(String)
-    temp = Column(String)
