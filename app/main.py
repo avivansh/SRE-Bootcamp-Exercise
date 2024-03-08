@@ -1,13 +1,16 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, status
-from sqlalchemy import create_engine, text
 import logging
+from sqlalchemy import create_engine, text
+import socket
 from app.api.v1 import students
 from .config import settings
 
-# TODO:- add database migrations to the application
-# TODO:- add logging to the application
-# TODO:- add tests to the application
+hostname = socket.gethostname()
+
+
+# TODO:- Perform code linting in CI-CD pipeline
+# TODO:- Add logging to the application
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -33,7 +36,7 @@ app.include_router(students.router)
 
 @app.get("/")
 def root():
-    return {"message": "Hello World"}
+    return {"message": f"Hello World + {hostname}"}
 
 @app.get("/healthcheck", status_code=status.HTTP_200_OK)
 def read_health_check():
