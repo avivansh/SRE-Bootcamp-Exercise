@@ -35,6 +35,8 @@ docker run -d --name sre-bootcamp-api-2 --hostname sre-bootcamp-api-2 --network 
 docker run --name nginx -p 80:80 -v ./nginx.conf:/etc/nginx/nginx.conf --network sre-bootcamp nginx
 ```
 
+Hit the [url](http://localhost:80) multiple time and observe the response from different api server instances
+
 ## Resources
 
 - [Fast API Docs](https://fastapi.tiangolo.com/learn/)

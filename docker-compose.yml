@@ -1,19 +1,5 @@
 version: "3"
 services:
-  api:
-    depends_on:
-      - db
-    build: .
-    env_file:
-      - .env
-    ports:
-      - "8000:8000"
-    volumes:
-        - .:/app # This is the line that mounts the local directory to the container
-    command:
-      - /bin/bash
-      - -c
-      - "./docker-entrypoint.sh"
 
   db:
     image: "postgres:16"
@@ -24,7 +10,44 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api_1:
+    depends_on:
+      db:
+        condition: service_healthy
+    build: .
+    env_file:
+      - .env
+    volumes:
+        - .:/app # This is the line that mounts the local directory to the container
+    command: bash ./docker-entrypoint.sh
+
+  api_2:
+    depends_on:
+      - db
+      - api_1
+    build: .
+    env_file:
+      - .env
+    volumes:
+        - .:/app # This is the line that mounts the local directory to the container
+    command: bash ./docker-entrypoint.sh
+
+  nginx:
+    image: nginx
+    depends_on:
+      - api_1
+      - api_2
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
 
 volumes:
   postgres_data:
